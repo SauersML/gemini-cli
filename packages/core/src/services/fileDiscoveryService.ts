@@ -69,7 +69,10 @@ export class FileDiscoveryService {
    */
   shouldGitIgnoreFile(filePath: string): boolean {
     if (this.gitIgnoreFilter) {
-      return this.gitIgnoreFilter.isIgnored(filePath);
+      // Convert absolute path to a relative path before checking.
+      // The underlying ignore parser expects relative paths.
+      const relativePath = path.relative(this.projectRoot, filePath);
+      return this.gitIgnoreFilter.isIgnored(relativePath);
     }
     return false;
   }
@@ -79,7 +82,9 @@ export class FileDiscoveryService {
    */
   shouldGeminiIgnoreFile(filePath: string): boolean {
     if (this.geminiIgnoreFilter) {
-      return this.geminiIgnoreFilter.isIgnored(filePath);
+      // Convert absolute path to a relative path before checking.
+      const relativePath = path.relative(this.projectRoot, filePath);
+      return this.geminiIgnoreFilter.isIgnored(relativePath);
     }
     return false;
   }
